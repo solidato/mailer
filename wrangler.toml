@@ -1,0 +1,43 @@
+name = "neokingdom-mailer"
+main = "dist/index.mjs"
+compatibility_date = "2022-05-28"
+compatibility_flags = []
+account_id = "82321a9ff91bb528e4b1d1541178417f"
+
+[build]
+command = "node build.js"
+
+[env.staging]
+workers_dev = true
+name = "neokingdom-staging"
+kv_namespaces = [ 
+         { binding = "NEOKINGDOM_NAMESPACE", id = "8958bed27b1841f680e574d60112efb5" }
+]
+[env.staging.vars]
+SUBGRAPH_API = "https://api.neokingdom.org/subgraphs/name/NeokingdomDAO/dao"
+EMAIL_FROM = "dao@neokingdom.org"
+EMAIL_TO = "nicola@neokingdom.org"
+EMAIL_CC = "alberto@granzotto.net,stefano.ceschib@gmail.com"
+ODOO_API = "https://odoo.neokingdom.org/jsonrpc"
+DAO_URL = "https://dao.neokingdom.org"
+
+[env.production]
+name = "neokingdom"
+workers_dev = false
+kv_namespaces = [ 
+         { binding = "NEOKINGDOM_NAMESPACE", id = "6d497c85b3fe44b99c5ab4e6147f3928" }
+]
+[env.production.vars]
+SUBGRAPH_API = "https://api.neokingdom.org/subgraphs/name/NeokingdomDAO/dao"
+EMAIL_FROM = "dao@neokingdom.org"
+EMAIL_TO = "benjamin@neokingdom.org"
+EMAIL_CC = "alberto@granzotto.net,stefano.ceschib@gmail.com,nicola@neokingdom.org"
+ODOO_API = "https://odoo.neokingdom.org/jsonrpc"
+DAO_URL = "https://dao.neokingdom.org"
+
+[miniflare]
+env_path = ".env.test"             # --env
+kv_persist = false                  # --kv-persist
+cache_persist = "./cache"          # --cache-persist
+host = "127.0.0.1"                 # --host
+port = 1337                        # --port
