@@ -7,7 +7,6 @@ import {
   sendVotingStartsEmails,
   getFailedVotingStartEmailResolutions,
 } from "../email";
-import { fetchAccessToken } from "../auth";
 import {
   fetchLastCreatedResolutions,
   fetchLastApprovedResolutionIds,
@@ -145,18 +144,15 @@ export async function handleNewOffers(
   event: FetchEvent | ScheduledEvent,
   ethToEmails: any
 ) {
-  const accessToken = await fetchAccessToken(event);
+  const offers = await fetchNewOffers(event);
+  if (offers.length > 0) {
+    const contributors = await fetchContributors(event);
+    const emails = contributors
+      .map((contributor) => ethToEmails[contributor.address.toLowerCase()])
+      .filter((email) => email);
 
-  if (accessToken !== undefined) {
-    const offers = await fetchNewOffers(event);
-    if (offers.length > 0) {
-      const contributors = await fetchContributors(event);
-      const emails = contributors
-        .map((contributor) => ethToEmails[contributor.address.toLowerCase()])
-        .filter((email) => email);
-
-      await sendNewOffersEmails(emails, event);
-    }
+    await sendNewOffersEmails(emails, event);
   }
+
   return new Response("OK");
 }

@@ -78,7 +78,7 @@ async function login(event: FetchEvent | ScheduledEvent) {
     params: {
       service: "common",
       method: "login",
-      args: ["teledisko", ODOO_USERNAME, ODOO_PASSWORD],
+      args: ["neokingdomdao", ODOO_USERNAME, ODOO_PASSWORD],
     },
     id: uuidv4(),
   };
@@ -99,7 +99,7 @@ async function users(
       service: "object",
       method: "execute_kw",
       args: [
-        "teledisko",
+        "neokingdomdao",
         requestId,
         ODOO_PASSWORD,
         "res.users",
