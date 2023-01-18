@@ -53,6 +53,9 @@ const bodyTemplate1 = `<html>
 const bodyTemplate2 = `<br/>
 Cheers,<br/>
 The Oracle
+<br/>
+<br/>
+<img src="https://raw.githubusercontent.com/NeokingdomDAO/mailer/main/assets/logo.jpeg" width="160" height="87" border="0">
 </body>
 </html>`;
 
