@@ -41,3 +41,5 @@ kv_persist = false                  # --kv-persist
 cache_persist = "./cache"          # --cache-persist
 host = "127.0.0.1"                 # --host
 port = 1337                        # --port
+watch = true                       # --watch
+live_reload = true                 # --live-reload

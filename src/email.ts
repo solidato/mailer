@@ -10,10 +10,11 @@ async function sendEmail(
   subject: string,
   body: string
 ) {
-  const sendRequest = new Request("https://api.mailchannels.net/tx/v1/send", {
+  const sendRequest = new Request("https://api.sendgrid.com/v3/mail/send", {
     method: "POST",
     headers: {
       "content-type": "application/json",
+      Authorization: `Bearer ${SENDGRID_API_KEY}`,
     },
     body: JSON.stringify({
       personalizations: [
@@ -28,7 +29,7 @@ async function sendEmail(
       ],
       from: {
         email: EMAIL_FROM,
-        name: "NeokingdomDAO Oracle",
+        name: "Neokingdom DAO",
       },
       subject: subject,
       content: [
@@ -131,13 +132,11 @@ async function sendEmails(
     ids.map(async (resolutionId) => {
       try {
         const response = await sendMailFunc(resolutionId);
-        if (response.status !== 200) {
+        if (![200, 202].includes(response.status)) {
           failedIds!.push(resolutionId);
           console.error(await response.text());
         } else {
-          console.log(
-            `Email ${resolutionId} sent. Response: ${await response.text()}`
-          );
+          console.log(`Email for resolution ${resolutionId} sent.`);
         }
       } catch (e) {
         failedIds!.push(resolutionId);

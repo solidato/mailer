@@ -1,8 +1,6 @@
 export {};
 
 declare global {
-  const EMAIL_USER: string;
-  const EMAIL_PASS: string;
   const ODOO_USERNAME: string;
   const ODOO_PASSWORD: string;
   const ODOO_API: string;
@@ -11,5 +9,6 @@ declare global {
   const EMAIL_CC: string;
   const SUBGRAPH_API: string;
   const DAO_URL: string;
+  const SENDGRID_API_KEY: string;
   const NEOKINGDOM_NAMESPACE: KVNamespace;
 }
