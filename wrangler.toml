@@ -23,7 +23,7 @@ DAO_URL = "https://dao.neokingdom.org"
 
 [env.production]
 name = "neokingdomdao-mailer"
-workers_dev = false
+workers_dev = true
 kv_namespaces = [ 
          { binding = "NEOKINGDOM_NAMESPACE", id = "6d497c85b3fe44b99c5ab4e6147f3928" }
 ]
