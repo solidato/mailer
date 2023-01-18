@@ -1,4 +1,4 @@
-name = "neokingdom-mailer"
+name = "neokingdomdao-mailer"
 main = "dist/index.mjs"
 compatibility_date = "2022-05-28"
 compatibility_flags = []
@@ -9,7 +9,7 @@ command = "node build.js"
 
 [env.staging]
 workers_dev = true
-name = "neokingdom-staging"
+name = "neokingdomdao-mailer-staging"
 kv_namespaces = [ 
          { binding = "NEOKINGDOM_NAMESPACE", id = "8958bed27b1841f680e574d60112efb5" }
 ]
@@ -22,7 +22,7 @@ ODOO_API = "https://odoo.neokingdom.org/jsonrpc"
 DAO_URL = "https://dao.neokingdom.org"
 
 [env.production]
-name = "neokingdom"
+name = "neokingdomdao-mailer"
 workers_dev = false
 kv_namespaces = [ 
          { binding = "NEOKINGDOM_NAMESPACE", id = "6d497c85b3fe44b99c5ab4e6147f3928" }
