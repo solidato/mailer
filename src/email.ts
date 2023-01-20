@@ -10,6 +10,8 @@ async function sendEmail(
   subject: string,
   body: string
 ) {
+  const ccUnique = new Set(cc.split(','));
+  ccUnique.delete(to);
   const sendRequest = new Request("https://api.sendgrid.com/v3/mail/send", {
     method: "POST",
     headers: {
@@ -20,7 +22,7 @@ async function sendEmail(
       personalizations: [
         {
           to: [{ email: to }],
-          cc: cc.split(",").map((email) => {
+          cc: Array.from(ccUnique).map((email) => {
             return {
               email: email,
             };
