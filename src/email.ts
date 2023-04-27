@@ -10,7 +10,7 @@ async function sendEmail(
   subject: string,
   body: string
 ) {
-  const ccUnique = new Set(cc.split(','));
+  const ccUnique = new Set(cc.split(","));
   ccUnique.delete(to);
   const sendRequest = new Request("https://api.sendgrid.com/v3/mail/send", {
     method: "POST",
@@ -90,10 +90,10 @@ async function sendNewOffersEmail(contributors: string[]) {
   return await sendToContributors(
     contributors,
     `<p>Dear Contributor,</p> 
-      <p>new NeokingdomTokens have been offered internally.<br/>
+      <p>new GovernanceTokens have been offered internally.<br/>
       If you are interested in an exchange, please check them out <a href="${DAO_URL}/#/tokens">in the token page.</a>
       </p>`,
-    "New NeokingdomToken offers"
+    "New GovernanceToken offers"
   );
 }
 
