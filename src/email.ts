@@ -67,7 +67,7 @@ function buildEmailPage(content: string) {
 
 async function sendPreDraftEmail(resolutionId: string) {
   const body = buildEmailPage(
-    `<p>Dear Board Member,</p><p>a new pre-draft resolution has been created.<br/>Would you mind <a href="${DAO_URL}/#/resolutions/${resolutionId}/edit">reviewing it?</a></p>`
+    `<p>Dear Board Member,</p><p>a new pre-draft resolution has been created.<br/>Would you mind <a href="${DAO_URL}/resolutions/${resolutionId}/edit">reviewing it?</a></p>`
   );
   return await sendEmail(EMAIL_TO, EMAIL_CC, "New Pre-Draft to Review", body);
 }
@@ -91,7 +91,7 @@ async function sendNewOffersEmail(contributors: string[]) {
     contributors,
     `<p>Dear Contributor,</p> 
       <p>new GovernanceTokens have been offered internally.<br/>
-      If you are interested in an exchange, please check them out <a href="${DAO_URL}/#/tokens">in the token page.</a>
+      If you are interested in an exchange, please check them out <a href="${DAO_URL}/tokens">in the token page.</a>
       </p>`,
     "New GovernanceToken offers"
   );
@@ -104,7 +104,7 @@ async function sendVotingStartsEmail(
   return await sendToContributors(
     contributors,
     `<p>Dear Contributor,</p> 
-      <p>The voting for <a href="${DAO_URL}/#/resolutions/${resolutionId}">the resolution #${resolutionId}</a> starts now!<br/>
+      <p>The voting for <a href="${DAO_URL}/resolutions/${resolutionId}">the resolution #${resolutionId}</a> starts now!<br/>
       Please cast your vote before its expiration.
       </p>`,
     "Voting starts!"
@@ -119,7 +119,7 @@ async function sendResolutionApprovedEmail(
   let date = new Date();
   date.setTime(votingStarts * 1000);
   const votingStartsString = date.toUTCString();
-  const content = `<p>Dear Contributor,</p><p>a new resolution has been approved.<br/>The polls open ${votingStartsString}. Remember to cast your vote then.<br>You can find more details <a href="${DAO_URL}/#/resolutions/${resolutionId}">on the resolution page.</a></p>`;
+  const content = `<p>Dear Contributor,</p><p>a new resolution has been approved.<br/>The polls open ${votingStartsString}. Remember to cast your vote then.<br>You can find more details <a href="${DAO_URL}/resolutions/${resolutionId}">on the resolution page.</a></p>`;
 
   return await sendToContributors(
     voters,
