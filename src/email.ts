@@ -91,7 +91,7 @@ async function sendNewOffersEmail(contributors: string[]) {
     contributors,
     `<p>Dear Contributor,</p> 
       <p>new GovernanceTokens have been offered internally.<br/>
-      If you are interested in an exchange, please check them out <a href="${DAO_URL}/tokens">in the token page.</a>
+      If you are interested in an exchange, please check them out <a href="${DAO_URL}/tokens-offers">in the token page.</a>
       </p>`,
     "New GovernanceToken offers"
   );
