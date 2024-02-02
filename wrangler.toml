@@ -14,7 +14,7 @@ kv_namespaces = [
          { binding = "NEOKINGDOM_NAMESPACE", id = "8958bed27b1841f680e574d60112efb5" }
 ]
 [env.staging.vars]
-SUBGRAPH_API = "https://api.neokingdom.org/subgraphs/name/NeokingdomDAO/dao"
+SUBGRAPH_API = "https://api2.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere"
 EMAIL_FROM = "dao@neokingdom.org"
 EMAIL_TO = "nicola@neokingdom.org"
 EMAIL_CC = "alberto@granzotto.net,stefano.ceschib@gmail.com"
@@ -28,9 +28,9 @@ kv_namespaces = [
          { binding = "NEOKINGDOM_NAMESPACE", id = "6d497c85b3fe44b99c5ab4e6147f3928" }
 ]
 [env.production.vars]
-SUBGRAPH_API = "https://api.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere"
+SUBGRAPH_API = "https://api2.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere"
 EMAIL_FROM = "dao@neokingdom.org"
-EMAIL_TO = "benjamin@neokingdom.org"
+EMAIL_TO = "administration@neokingdom.org"
 EMAIL_CC = "alberto@granzotto.net,stefano.ceschib@gmail.com,nicola@neokingdom.org"
 ODOO_API = "https://odoo.neokingdom.org/jsonrpc"
 DAO_URL = "https://dao.neokingdom.org"
