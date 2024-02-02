@@ -31,7 +31,7 @@ kv_namespaces = [
 SUBGRAPH_API = "https://api2.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere"
 EMAIL_FROM = "dao@neokingdom.org"
 EMAIL_TO = "administration@neokingdom.org"
-EMAIL_CC = "alberto@granzotto.net,stefano.ceschib@gmail.com,nicola@neokingdom.org"
+EMAIL_CC = "alberto@granzotto.net,stefano.ceschib@gmail.com,nicola@neokingdom.org,ragnar@neokingdom.org"
 ODOO_API = "https://odoo.neokingdom.org/jsonrpc"
 DAO_URL = "https://dao.neokingdom.org"
 
