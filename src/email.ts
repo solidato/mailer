@@ -12,6 +12,8 @@ async function sendEmail(
 ) {
   const ccUnique = new Set(cc.split(","));
   ccUnique.delete(to);
+  console.log(to);
+  console.log(cc);
   const sendRequest = new Request("https://api.sendgrid.com/v3/mail/send", {
     method: "POST",
     headers: {
@@ -22,7 +24,7 @@ async function sendEmail(
       personalizations: [
         {
           to: [{ email: to }],
-          cc: Array.from(ccUnique).map((email) => {
+          bcc: Array.from(ccUnique).map((email) => {
             return {
               email: email,
             };
@@ -31,7 +33,7 @@ async function sendEmail(
       ],
       from: {
         email: EMAIL_FROM,
-        name: "Neokingdom DAO",
+        name: "Solidato OÜ",
       },
       subject: subject,
       content: [
@@ -54,10 +56,10 @@ const bodyTemplate1 = `<html>
 
 const bodyTemplate2 = `<br/>
 Cheers,<br/>
-The Oracle
+Solidato Team
 <br/>
 <br/>
-<img src="https://raw.githubusercontent.com/NeokingdomDAO/mailer/main/assets/logo.jpeg" width="160" height="87" border="0">
+<img src="${LOGO_URL}" width="160" height="160" border="0">
 </body>
 </html>`;
 
@@ -65,11 +67,11 @@ function buildEmailPage(content: string) {
   return `${bodyTemplate1}${content}${bodyTemplate2}`;
 }
 
-async function sendPreDraftEmail(resolutionId: string) {
+async function sendPreDraftEmail(resolutionId: string, to: string) {
   const body = buildEmailPage(
     `<p>Dear Board Member,</p><p>a new pre-draft resolution has been created.<br/>Would you mind <a href="${DAO_URL}/resolutions/${resolutionId}/edit">reviewing it?</a></p>`
   );
-  return await sendEmail(EMAIL_TO, EMAIL_CC, "New Pre-Draft to Review", body);
+  return await sendEmail(to, EMAIL_CC, "New Pre-Draft to Review", body);
 }
 
 async function sendToContributors(
@@ -154,7 +156,7 @@ async function sendEmails(
 }
 
 export async function getFailedEmailResolutions(key: string) {
-  const notEmailedResolutions = await NEOKINGDOM_NAMESPACE.get(key);
+  const notEmailedResolutions = await SOLIDATO_NAMESPACE.get(key);
   var ids: ResolutionData[] = [];
   if (notEmailedResolutions != null) {
     ids = JSON.parse(notEmailedResolutions) as ResolutionData[];
@@ -164,18 +166,18 @@ export async function getFailedEmailResolutions(key: string) {
 }
 
 export async function sendPreDraftEmails(
-  resolutions: ResolutionData[],
+  resolutionReceiversMap: Record<string, string>,
   event: FetchEvent | ScheduledEvent
 ) {
   const failedIds: string[] = await sendEmails(
-    resolutions.map((r) => r.id),
+    Object.keys(resolutionReceiversMap),
     async (id: string) => {
-      return await sendPreDraftEmail(id);
+      return await sendPreDraftEmail(id, resolutionReceiversMap[id][0]);
     }
   );
 
   event.waitUntil(
-    NEOKINGDOM_NAMESPACE.put(FAILED_PRE_DRAFT_KEY, JSON.stringify(failedIds))
+    SOLIDATO_NAMESPACE.put(FAILED_PRE_DRAFT_KEY, JSON.stringify(failedIds))
   );
 
   return failedIds;
@@ -206,7 +208,7 @@ export async function sendResolutionApprovedEmails(
 
   const failedResolutions = resolutions.filter((r) => failedIds.includes(r.id));
   event.waitUntil(
-    NEOKINGDOM_NAMESPACE.put(
+    SOLIDATO_NAMESPACE.put(
       FAILED_APPROVED_RESOLUTION_EMAILS_KEY,
       JSON.stringify(failedResolutions)
     )
@@ -229,7 +231,7 @@ export async function sendVotingStartsEmails(
 
   const failedResolutions = resolutions.filter((r) => failedIds.includes(r.id));
   event.waitUntil(
-    NEOKINGDOM_NAMESPACE.put(
+    SOLIDATO_NAMESPACE.put(
       FAILED_VOTING_START_EMAILS_KEY,
       JSON.stringify(failedResolutions)
     )

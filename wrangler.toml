@@ -1,39 +1,43 @@
-name = "neokingdomdao-mailer"
+name = "solidato-demo-mailer"
 main = "dist/index.mjs"
 compatibility_date = "2022-05-28"
 compatibility_flags = []
-account_id = "82321a9ff91bb528e4b1d1541178417f"
+account_id = "4396a459a1b970ddb422b39a01f88fd6"
 
 [build]
 command = "node build.js"
 
 [env.staging]
 workers_dev = true
-name = "neokingdomdao-mailer-staging"
+name = "solidato-demo-mailer-staging"
 kv_namespaces = [ 
-         { binding = "NEOKINGDOM_NAMESPACE", id = "8958bed27b1841f680e574d60112efb5" }
+         { binding = "SOLIDATO_NAMESPACE", id = "dbdc3aa1eb1440a1be15f3b044ba167c", preview_id = "79441d66d31745c197122ef354c6af4d" }
 ]
+
 [env.staging.vars]
-SUBGRAPH_API = "https://api2.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere"
-EMAIL_FROM = "dao@neokingdom.org"
-EMAIL_TO = "nicola@neokingdom.org"
-EMAIL_CC = "alberto@granzotto.net,stefano.ceschib@gmail.com"
-ODOO_API = "https://odoo.neokingdom.org/jsonrpc"
-DAO_URL = "https://dao.neokingdom.org"
+SUBGRAPH_API = "https://api.studio.thegraph.com/proxy/73705/solidato/version/latest"
+EMAIL_FROM = "demo@solidato.com"
+EMAIL_TO = "demo@solidato.com"
+EMAIL_CC = "miotto@posteo.de,marko@solidato.com,ragnar@solidato.com,alberto@solidato.com"
+BACKEND_API = "http://demo.solidato.com/api/shareholders"
+DAO_URL = "https://demo.solidato.com"
+LOGO_URL = "https://solidato.com/_next/image?url=%2Flogo.png&w=256&q=75"
 
 [env.production]
-name = "neokingdomdao-mailer"
+name = "solidato-mailer"
 workers_dev = true
 kv_namespaces = [ 
-         { binding = "NEOKINGDOM_NAMESPACE", id = "6d497c85b3fe44b99c5ab4e6147f3928" }
+         { binding = "SOLIDATO_NAMESPACE", id = "b36c78cf35694bab985ffc1a3ec6aafd", preview_id = "9bced35020da4b2ab8a97ff6fa4d611d" }
 ]
+
 [env.production.vars]
-SUBGRAPH_API = "https://api2.neokingdom.org/subgraphs/name/NeokingdomDAO/vigodarzere"
-EMAIL_FROM = "dao@neokingdom.org"
-EMAIL_TO = "administration@neokingdom.org"
-EMAIL_CC = "alberto@granzotto.net,stefano.ceschib@gmail.com,nicola@neokingdom.org,ragnar@neokingdom.org"
-ODOO_API = "https://odoo.neokingdom.org/jsonrpc"
-DAO_URL = "https://dao.neokingdom.org"
+SUBGRAPH_API = "https://api.studio.thegraph.com/proxy/73705/solidato/version/latest"
+EMAIL_FROM = "demo@solidato.com"
+EMAIL_TO = "demo@solidato.com"
+EMAIL_CC = "miotto@posteo.de,marko@solidato.com,ragnar@solidato.com,alberto@solidato.com"
+BACKEND_API = "http://demo.solidato.com/api/shareholders"
+DAO_URL = "https://demo.solidato.com"
+LOGO_URL = "https://solidato.com/_next/image?url=%2Flogo.png&w=256&q=75"
 
 [miniflare]
 env_path = ".env.test"             # --env

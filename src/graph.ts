@@ -6,19 +6,21 @@ const LAST_APPROVED_TIMESTAMP_KEY = "lastApprovedTimestamp";
 const LAST_FETCHED_OFFER_TIMESTAMP_KEY = "lastFetchedOfferTimestamp";
 
 const RESOLUTIONS_QUERY = (timestamp: string) => `
-  query GetResolutions {
+  {
     resolutions(orderBy: createTimestamp, orderDirection: asc, where: {createTimestamp_gt: ${timestamp}}) {
       id
       createTimestamp
+      createBy
     }
   }
 `;
 
 const APPROVED_RESOLUTIONS_QUERY = (timestamp: string) => `
-  query GetApprovedResolutions {
+  {
     resolutions(orderBy: approveTimestamp, orderDirection: asc, where: {approveTimestamp_gt: ${timestamp}}) {
       id
-      approveTimestamp,
+      approveTimestamp
+      createBy,
       resolutionType {
         noticePeriod
         votingPeriod
@@ -28,7 +30,7 @@ const APPROVED_RESOLUTIONS_QUERY = (timestamp: string) => `
 `;
 
 const NEW_OFFERS_QUERY = (timestamp: string) => `
-  query GetNewOffers {
+  {
     offers(orderBy: createTimestamp, orderDirection: asc, where: {createTimestamp_gt: ${timestamp}}) {
       id
       from
@@ -39,7 +41,7 @@ const NEW_OFFERS_QUERY = (timestamp: string) => `
 `;
 
 const VOTERS_QUERY = (resolutionId: string) => `
-  query GetVoters {
+  {
     resolution(id: ${resolutionId}) {
       voters {
         address
@@ -49,7 +51,7 @@ const VOTERS_QUERY = (resolutionId: string) => `
 `;
 
 const CONTRIBUTORS_QUERY = () => `
-  query GetContributors {
+  {
     daoUsers {
       address
     }
@@ -74,9 +76,10 @@ type GraphResponseError = Record<"errors", any[]>;
 async function fetchFromGraphql(query: string) {
   const response = await fetch(SUBGRAPH_API, {
     method: "POST",
-    body: JSON.stringify({
-      query,
-    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ query }),
   });
 
   return response;
@@ -88,7 +91,7 @@ async function handleError(
 ) {
   console.error(message);
   event.waitUntil(
-    NEOKINGDOM_NAMESPACE.put(GRAPH_ERROR_TIMESTAMP_KEY, Date.now().toString())
+    SOLIDATO_NAMESPACE.put(GRAPH_ERROR_TIMESTAMP_KEY, Date.now().toString())
   );
 }
 
@@ -104,9 +107,8 @@ async function fetchData(
 
     const jsonBody = await response.json();
     const body = jsonBody as GraphResponse | GraphResponseError;
-
     if ("data" in body) {
-      event.waitUntil(NEOKINGDOM_NAMESPACE.put(GRAPH_ERROR_TIMESTAMP_KEY, ""));
+      event.waitUntil(SOLIDATO_NAMESPACE.put(GRAPH_ERROR_TIMESTAMP_KEY, ""));
       return body.data;
     }
 
@@ -121,17 +123,18 @@ export async function fetchLastCreatedResolutions(
   event: FetchEvent | ScheduledEvent
 ): Promise<ResolutionData[]> {
   let lastCreateTimestamp =
-    (await NEOKINGDOM_NAMESPACE.get(LAST_CREATE_TIMESTAMP_KEY)) || "0";
+    (await SOLIDATO_NAMESPACE.get(LAST_CREATE_TIMESTAMP_KEY)) || "0";
 
   const data = (await fetchData(
     event,
     RESOLUTIONS_QUERY(lastCreateTimestamp)
   )) as GraphResolutions;
+
   const resolutions = data.resolutions as ResolutionData[];
   if (resolutions.length > 0) {
     lastCreateTimestamp = resolutions[resolutions.length - 1].createTimestamp!;
     event.waitUntil(
-      NEOKINGDOM_NAMESPACE.put(LAST_CREATE_TIMESTAMP_KEY, lastCreateTimestamp)
+      SOLIDATO_NAMESPACE.put(LAST_CREATE_TIMESTAMP_KEY, lastCreateTimestamp)
     );
   }
 
@@ -154,7 +157,7 @@ export async function fetchLastApprovedResolutionIds(
   event: FetchEvent | ScheduledEvent
 ): Promise<ResolutionData[]> {
   let lastApprovedTimestamp =
-    (await NEOKINGDOM_NAMESPACE.get(LAST_APPROVED_TIMESTAMP_KEY)) || "0";
+    (await SOLIDATO_NAMESPACE.get(LAST_APPROVED_TIMESTAMP_KEY)) || "0";
 
   const resolutions = await fetchApprovedResolutions(
     parseInt(lastApprovedTimestamp),
@@ -165,10 +168,7 @@ export async function fetchLastApprovedResolutionIds(
     lastApprovedTimestamp =
       resolutions[resolutions.length - 1].approveTimestamp!;
     event.waitUntil(
-      NEOKINGDOM_NAMESPACE.put(
-        LAST_APPROVED_TIMESTAMP_KEY,
-        lastApprovedTimestamp
-      )
+      SOLIDATO_NAMESPACE.put(LAST_APPROVED_TIMESTAMP_KEY, lastApprovedTimestamp)
     );
   }
 
@@ -204,7 +204,7 @@ export async function fetchNewOffers(
   event: FetchEvent | ScheduledEvent
 ): Promise<OfferData[]> {
   let lastFetchedOfferTimestamp =
-    (await NEOKINGDOM_NAMESPACE.get(LAST_FETCHED_OFFER_TIMESTAMP_KEY)) || "0";
+    (await SOLIDATO_NAMESPACE.get(LAST_FETCHED_OFFER_TIMESTAMP_KEY)) || "0";
 
   const data = (await fetchData(
     event,
@@ -215,7 +215,7 @@ export async function fetchNewOffers(
   if (offers.length > 0) {
     lastFetchedOfferTimestamp = offers[offers.length - 1].createTimestamp;
     event.waitUntil(
-      NEOKINGDOM_NAMESPACE.put(
+      SOLIDATO_NAMESPACE.put(
         LAST_FETCHED_OFFER_TIMESTAMP_KEY,
         lastFetchedOfferTimestamp
       )
@@ -226,7 +226,7 @@ export async function fetchNewOffers(
 }
 
 export async function getGraphErrorTimestamp(): Promise<string | null> {
-  const value = await NEOKINGDOM_NAMESPACE.get(GRAPH_ERROR_TIMESTAMP_KEY);
+  const value = await SOLIDATO_NAMESPACE.get(GRAPH_ERROR_TIMESTAMP_KEY);
   if (value == "") {
     return null;
   }
