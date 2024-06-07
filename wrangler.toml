@@ -24,7 +24,7 @@ DAO_URL = "https://demo.solidato.com"
 LOGO_URL = "https://solidato.com/_next/image?url=%2Flogo.png&w=256&q=75"
 
 [env.production]
-name = "solidato-mailer"
+name = "solidato-demo-mailer"
 workers_dev = true
 kv_namespaces = [ 
          { binding = "SOLIDATO_NAMESPACE", id = "b36c78cf35694bab985ffc1a3ec6aafd", preview_id = "9bced35020da4b2ab8a97ff6fa4d611d" }
