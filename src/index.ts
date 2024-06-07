@@ -7,7 +7,6 @@ import {
 import {
   handleApprovedResolutions,
   handleCreatedResolutions,
-  handleNewOffers,
   handleVotingStarts,
 } from "./controllers/mailer";
 import { fetchUsers } from "./backend";
@@ -17,7 +16,6 @@ async function handleEmails(event: ScheduledEvent) {
 
   await handleCreatedResolutions(event, ethToEmails);
   await handleApprovedResolutions(event, ethToEmails);
-  await handleNewOffers(event, ethToEmails);
   await handleVotingStarts(event, ethToEmails);
 
   return new Response("OK");
@@ -30,10 +28,6 @@ async function handle(event: FetchEvent) {
 
   if (event.request.url.includes("/mails/approved")) {
     return await handleApprovedResolutions(event, await fetchUsers(event));
-  }
-
-  if (event.request.url.includes("/mails/offers")) {
-    return await handleNewOffers(event, await fetchUsers(event));
   }
 
   if (event.request.url.includes("/mails/vote")) {

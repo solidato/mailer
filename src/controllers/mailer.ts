@@ -1,7 +1,6 @@
 import {
   sendPreDraftEmails,
   sendResolutionApprovedEmails,
-  sendNewOffersEmails,
   getFailedPreDraftEmailResolution,
   getFailedApprovedEmailResolutions,
   sendVotingStartsEmails,
@@ -11,9 +10,6 @@ import {
   fetchLastCreatedResolutions,
   fetchLastApprovedResolutionIds,
   fetchApprovedResolutions,
-  fetchVoters,
-  fetchNewOffers,
-  fetchContributors,
 } from "../graph";
 import { ResolutionData } from "../model";
 
@@ -64,6 +60,7 @@ export async function handleApprovedResolutions(
   );
   const previousFailedIds = await getFailedApprovedEmailResolutions();
   const totalResolutions = previousFailedIds.concat(newResolutions);
+
   if (totalResolutions.length > 0) {
     if (Object.keys(ethToEmails).length > 0) {
       const resolutionVotersMap: any = {};
@@ -164,23 +161,6 @@ export async function handleVotingStarts(
       JSON.stringify(todaySeconds)
     )
   );
-
-  return new Response("OK");
-}
-
-export async function handleNewOffers(
-  event: FetchEvent | ScheduledEvent,
-  ethToEmails: any
-) {
-  const offers = await fetchNewOffers(event);
-  if (offers.length > 0) {
-    const contributors = await fetchContributors(event);
-    const emails = contributors
-      .map((contributor) => ethToEmails[contributor.address.toLowerCase()])
-      .filter((email) => email);
-
-    await sendNewOffersEmails(emails, event);
-  }
 
   return new Response("OK");
 }
